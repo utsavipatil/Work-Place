@@ -13,6 +13,9 @@ import {
   useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
+import {setDoc, doc } from "firebase/firestore";
+import { db } from "../../../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -66,6 +69,9 @@ const industryType = [
 ];
 
 function EmployerOnboarding() {
+
+  const navigate = useNavigate();
+
   const userData = JSON.parse(localStorage.getItem("user")); //make JavaScript Object
 
   const [userInfo, setUserInfo] = useState({
@@ -80,8 +86,19 @@ function EmployerOnboarding() {
     industry: "",
   });
 
-  const submitUserInfo = (e) => {
+  const submitUserInfo = async (e) => {
     e.preventDefault();
+    try {
+      await setDoc(doc(db, "userData", `${userData.uid}`), {
+        ...userInfo,
+        type : 'employer'
+      });
+      alert('Successfully Submitted!!!');
+      navigate('/employer/profile');
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+
     console.log("submit", userInfo);
   };
 
@@ -140,7 +157,7 @@ function EmployerOnboarding() {
           />
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography variant="h6">Phone </Typography>
+          <Typography variant="h6">Phone</Typography>
           <TextField
             type="number"
             value={userInfo.phone}
@@ -160,7 +177,7 @@ function EmployerOnboarding() {
               setUserInfo({ ...userInfo, companyName: e.target.value })
             }
             id="outlined"
-            label="Experiance"
+            label="Company Name"
             sx={{ width: "80%" }}
           />
         </Grid>
@@ -173,7 +190,7 @@ function EmployerOnboarding() {
               setUserInfo({ ...userInfo, companySize: e.target.value })
             }
             id="outlined"
-            label="Education"
+            label="Company Size"
             sx={{ width: "80%" }}
           />
         </Grid>
@@ -218,7 +235,7 @@ function EmployerOnboarding() {
               setUserInfo({ ...userInfo, address: e.target.value })
             }
             id="outlined"
-            label="Education"
+            label="Company Address"
             sx={{ width: "80%" }}
           />
         </Grid>

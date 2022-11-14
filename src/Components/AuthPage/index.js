@@ -18,16 +18,16 @@ function AuthPage({type}) {
           const token = credential.accessToken;
           // The signed-in user info.
           const user = result.user;
-          console.log(user);
+          console.log("User", user);
           localStorage.setItem('user' , JSON.stringify(user));
           if(type === 'Candidate'){ //navigate to candidate onboarding
-            if(!true){ //data already there => profile
+            if(!true){ //user already there => profile
               navigate('/candidate/profile');
             }else{ //onboarding
               navigate('/candidate/onboarding');
             }
           }else{ //navigate to Employer
-            if(!true){ //data already there => profile
+            if(!true){ //user already there => profile
               navigate('/employer/profile');
             }else{ //onboarding
               navigate('/employer/onboarding');

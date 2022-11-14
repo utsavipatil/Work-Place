@@ -13,6 +13,9 @@ import {
   useTheme,
 } from "@mui/material";
 import React, { useState } from "react";
+import { db } from "../../../firebaseConfig";
+import {setDoc, doc } from "firebase/firestore";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -74,6 +77,7 @@ const domains = [
 function CandidateOnboarding() {
   const userData = JSON.parse(localStorage.getItem("user")); //make JavaScript Object
   const theme = useTheme();
+  const navigate = useNavigate();
 
   const [userInfo, setUserInfo] = useState({
     name: "",
@@ -85,8 +89,18 @@ function CandidateOnboarding() {
     domain: "",
   });
 
-  const submitUserInfo = (e) => {
+  const submitUserInfo = async(e) => {
     e.preventDefault();
+    try {
+      await setDoc(doc(db, "userData", userData.uid), {
+        ...userInfo,
+        type : 'candidate'
+      });
+      alert('Successfully Submitted!!!');
+      navigate('/candidate/profile')
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
     console.log("submit", userInfo);
   };
 
