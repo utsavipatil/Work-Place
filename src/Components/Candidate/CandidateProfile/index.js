@@ -14,9 +14,8 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { db } from "../../../firebaseConfig";
-import { setDoc, doc } from "firebase/firestore";
+import { setDoc, doc , getDoc} from "firebase/firestore";
 import { Navigate, useNavigate } from "react-router-dom";
-import { getDoc } from "firebase/firestore";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
