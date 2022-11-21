@@ -1,20 +1,7 @@
 import { React, useEffect, useState } from "react";
 import { collection, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../../../../firebaseConfig";
-import {
-  Grid,
-  TextField,
-  Typography,
-  Button,
-  form,
-  InputLabel,
-  Select,
-  MenuItem,
-  OutlinedInput,
-  Box,
-  Chip,
-  useTheme,
-} from "@mui/material";
+import {Grid,Button} from "@mui/material";
 
 function SideBar({ selectAJob }) {
   const [alljobs, setAllJobs] = useState(null);
