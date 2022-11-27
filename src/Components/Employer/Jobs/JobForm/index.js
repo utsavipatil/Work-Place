@@ -104,13 +104,14 @@ function JobForm({postAJob, jobData, setJobData}) {
         await setDoc(doc(db, "JobsData", jobData.JobID), { //jobId will pass as parameter so it will select that jobID and update it
           ...jobData
         });
-        alert('Job Edited Successfully');
+        alert('Job Edited Successfully'); //setDoc(doc, data), doc(db,'collectionName' , 'docId')
       }else{
         await setDoc(doc(db, "JobsData", JobID), {
           JobID : JobID, //If a job is exists, it will be updated
           ...jobData,
           employerID : userInfo.uid,
-          createdAt : new Date()
+          createdAt : new Date(),
+          employerName : userInfo.displayName
         });
         alert('Job Posted Successfully');
       }

@@ -1,6 +1,31 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../firebaseConfig";
 import React, { useEffect, useState } from "react";
+import CommonTable from "../../Common/CommonTable";
+
+const coloumnName = [
+  {
+    title : 'Employer Name',
+    key : 'companyName'
+  },
+  {
+    title : 'Candidate Email',
+    key : 'candidateEmail'
+  },
+  {
+    title : 'Job Title',
+    key : 'title'
+  },
+  {
+    title : 'Job location',
+    key : 'location'
+  },
+  {
+    title : 'Status',
+    key : 'status'
+  },
+  
+]
 
 function Applications() {
   const userInfo = JSON.parse(localStorage.getItem("user"));
@@ -13,7 +38,7 @@ function Applications() {
     );
 
     let data = [];
-    const querySnapshot = await getDocs(q);
+    const querySnapshot = await getDocs(q); //If we don't want real time updates
     querySnapshot.forEach((doc) => {
       //doc.data() is never undefined for query doc snapshots
       data.push(doc.data());
@@ -29,7 +54,9 @@ function Applications() {
   return (
     <div>
       {allApplications && allApplications.length > 0 ? (
-        <div>data</div>
+        <div>
+          <CommonTable data={allApplications}  coloumnName={coloumnName}/>
+        </div>
       ) : allApplications && allApplications.length === 0 ? (
         <div>no data</div>
       ) : (

@@ -44,7 +44,8 @@ function CandidateJobs() {
     console.log(job, "job");
 
     /*
-      fetch the applications with candidate id, if job id is present in the applications then show alert already applied,
+      Only one time Apply=> fetch the applications with candidate id, 
+      if job id is present in the applications then show alert already applied,
       else apply for the job
     */
 
@@ -52,7 +53,7 @@ function CandidateJobs() {
       collection(db, "applications"),
       where("candidateId", "==", userInfo.uid)
     );
-    let data = [];
+    let data = []; //will have all the applications of the candidate with candidate id
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       //doc.data() is never undefined for query doc snapshots
@@ -79,6 +80,10 @@ function CandidateJobs() {
             createdAt: new Date(),
             candidateId: userInfo.uid,
             status: "applied",
+            candidateName : userInfo.displayName,
+            companyName : job.employerName,
+            candidateEmail : userInfo.email,
+            // candidateExperiance : userInfo.experiance
           },
           {
             merge: true,
