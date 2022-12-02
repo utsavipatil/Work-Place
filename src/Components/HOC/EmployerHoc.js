@@ -62,7 +62,7 @@ function EmployerHoc({ children }) {
 
   const reRoute = (page) => {
     handleCloseNavMenu();
-    navigate(`${page}`);
+    navigate(`/employer/${page}`);
   };
 
   return (

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import CommonTable from "../../Common/CommonTable";
 import {doc , deleteDoc,setDoc} from 'firebase/firestore';
 import { async } from "@firebase/util";
+import { v4 as uuidv4 } from "uuid";
 
 const coloumnName = [
   {
@@ -60,6 +61,8 @@ function Applicants() {
   }, []);
 
   const handleClick = async(action, row) => {
+    const lastMessageId = uuidv4();
+    const oneToOneMessageId = uuidv4();
     if(action === 'accept'){
       //we need to update the status of the application to approved
       try {
@@ -78,6 +81,31 @@ function Applicants() {
         console.log(error);
       }
       console.log('accept', row);
+      try {
+        console.log(row);
+        await setDoc(doc(db , 'lastMessage',lastMessageId),{
+          lastMessage : `Hey there, We have accepted your application for ${row.title}!!!`, //important
+          createdAt: new Date().getTime(),
+          employerId : userInfo.uid, //important
+          candidateId : row.candidateId, //important
+          JobID : row.JobID,
+          applicationId : row.applicationId,
+          lastMessageId : lastMessageId,
+          candidateName : row.candidateName, //important
+          employerName : row.companyName, //important
+          conversationId : `${userInfo.uid} + ${row.candidateId}` //important
+        })
+        await setDoc(doc(db,'oneToOneMessages', oneToOneMessageId),{
+          createdAt: new Date().getTime(),
+          conversationId : `${userInfo.uid} + ${row.candidateId}`,
+          userId : userInfo.uid,
+          userType : 'employer',
+          message : `Hey there, We have accepted your application for ${row.title}!!!`
+        })
+      }catch(error){
+        console.log(error);
+      }
+
     }else if (action === 'reject'){
       //application should be deleted
       await deleteDoc(doc(db , 'applications' , row.applicationId))

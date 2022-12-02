@@ -52,22 +52,25 @@ const mock = [
   },
 ];
 
-function LastMessage({ selectConversation }) {
+function LastMessage({ allLastMessages, selectConversation }) {
   return (
     <div>
-      {mock.map((item) => {
+      
+      {allLastMessages && allLastMessages.length > 0 ? (
+        <div>
+        {allLastMessages.map((item) => {
         return (
           <Grid
             onClick = {() => selectConversation(item)}
             container
-            key={item.id}
+            key={item.lastMessageId}
             sx={{ padding: "10px", margin: "10px", textAlign: "left" }}
           >
             <Grid item xs={9}>
-              {item.name}
+              {item.candidateName}
             </Grid>
             <Grid item xs={3}>
-              {item.time}
+              {"item.createdAt"}
             </Grid>
             <Grid item xs={12}>
               {item.lastMessage}
@@ -75,6 +78,12 @@ function LastMessage({ selectConversation }) {
           </Grid>
         );
       })}
+        </div>
+      ) : allLastMessages && allLastMessages.length === 0 ? (
+        <div>no data</div>
+      ) : (
+        <div>Loading</div>
+      )}
     </div>
   );
 }
