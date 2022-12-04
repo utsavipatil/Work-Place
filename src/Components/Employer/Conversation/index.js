@@ -124,5 +124,6 @@ function Conversation() {
 
 export default Conversation;
 
+//We can store any data up to 1MB in firebase that's why we are creating every message with different id
 //u9Bz5tZvROXqTSXOoyP2MeyXLqm1 + u9Bz5tZvROXqTSXOoyP2MeyXLqm1
 //u9Bz5tZvROXqTSXOoyP2MeyXLqm1 + u9Bz5tZvROXqTSXOoyP2MeyXLqm1

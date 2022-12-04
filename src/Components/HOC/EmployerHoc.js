@@ -18,23 +18,32 @@ import RestoreIcon from "@mui/icons-material/Restore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useNavigate } from "react-router-dom";
+import { auth} from "../../firebaseConfig";
+import BackupTableIcon from '@mui/icons-material/BackupTable';
+import WorkIcon from '@mui/icons-material/Work';
+import SmsIcon from '@mui/icons-material/Sms';
+import Person4Icon from '@mui/icons-material/Person4';
 
 const pages = [
   {
-    label: "Products",
+    label: "Profile",
     key: "profile",
+    icon : <Person4Icon/>
   },
   {
     label: "Jobs",
     key: "jobs",
+    icon : <WorkIcon/>
   },
   {
     label: "Applications",
     key: "applications",
+    icon : <BackupTableIcon/>
   },
   {
     label: "Conversation",
     key: "conversation",
+    icon : <SmsIcon/>
   },
 ];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
@@ -63,6 +72,12 @@ function EmployerHoc({ children }) {
   const reRoute = (page) => {
     handleCloseNavMenu();
     navigate(`/employer/${page}`);
+  };
+
+  const LogoutFun = () => {
+    localStorage.clear();
+    navigate("/");
+    auth.signOut();
   };
 
   return (
@@ -158,33 +173,11 @@ function EmployerHoc({ children }) {
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
+              <Tooltip title="logout">
+                <Button sx={{ color: "#fff" }} onClick={LogoutFun}>
+                  Logout
+                </Button>
               </Tooltip>
-              <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
-                  </MenuItem>
-                ))}
-              </Menu>
             </Box>
           </Toolbar>
         </Container>
@@ -209,9 +202,16 @@ function EmployerHoc({ children }) {
               setValue(newValue);
             }}
           >
-            <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-            <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-            <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+            {pages.map((page) => {
+              return (
+                <BottomNavigationAction
+                  key={page.key}
+                  onClick={() => reRoute(page.key)}
+                  label={page.lable}
+                  icon={page.icon}
+                />
+              );
+            })}
           </BottomNavigation>
         </Box>
       </Box>
