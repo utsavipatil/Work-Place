@@ -1,6 +1,6 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
+import { Box, Switch } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -23,6 +23,8 @@ import BackupTableIcon from "@mui/icons-material/BackupTable";
 import WorkIcon from "@mui/icons-material/Work";
 import SmsIcon from "@mui/icons-material/Sms";
 import Person4Icon from "@mui/icons-material/Person4";
+import {DarkModeContext} from "../Context/darkmode";
+import Logo from "../../assets/logo2.png";
 
 const pages = [
   {
@@ -53,6 +55,7 @@ function CandidateHoc({ children }) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [value, setValue] = React.useState(0);
   const navigate = useNavigate();
+  const [state, dispatch] = React.useContext(DarkModeContext);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -88,9 +91,8 @@ function CandidateHoc({ children }) {
         }}
       ></Box>
       <AppBar position="static">
-        <Container maxWidth="xl">
+        <Container maxWidth="xl" sx={{ backgroundColor: state.darkMode ? "#000" : "#fff" }}>
           <Toolbar disableGutters>
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
             <Typography
               variant="h6"
               noWrap
@@ -106,7 +108,7 @@ function CandidateHoc({ children }) {
                 textDecoration: "none",
               }}
             >
-              LOGO
+              <img src={Logo} alt="logo" style={{ width: "100px" }} />
             </Typography>
 
             <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -117,6 +119,7 @@ function CandidateHoc({ children }) {
                 aria-haspopup="true"
                 onClick={handleOpenNavMenu}
                 color="inherit"
+                sx={{ color: state.darkMode ? "#fff" : "#000" }}
               >
                 <MenuIcon />
               </IconButton>
@@ -140,12 +143,16 @@ function CandidateHoc({ children }) {
               >
                 {pages.map((page) => (
                   <MenuItem key={page} onClick={() => reRoute(page.key)}>
-                    <Typography textAlign="center">{page.label}</Typography>
+                    <Typography
+                      sx={{ backgroundColor: state.darkMode ? "#1a1a1a" : "#fff" }}
+                      textAlign="center"
+                    >
+                      {page.label}
+                    </Typography>
                   </MenuItem>
                 ))}
               </Menu>
             </Box>
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
             <Typography
               variant="h5"
               noWrap
@@ -158,23 +165,29 @@ function CandidateHoc({ children }) {
                 fontFamily: "monospace",
                 fontWeight: 700,
                 letterSpacing: ".3rem",
-                color: "inherit",
-                textDecoration: "none",
+                // color: "inherit",
+                textDecoration: "none"
               }}
             >
-              LOGO
+              <img src={Logo} alt="logo" style={{ width: "100px" }} />
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <MenuItem key={page} onClick={() => reRoute(page.key)}>
-                  <Typography textAlign="center">{page.label}</Typography>
+                  <Typography sx={{color: state.darkMode ? "#fff" : "#000"}} textAlign="center">{page.label}</Typography>
                 </MenuItem>
               ))}
             </Box>
 
             <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="logout">
-                <Button sx={{ color: "#fff" }} onClick={LogoutFun}>
+              <Tooltip title="Change Mode">
+                <Switch
+                  value={state.darkMode}
+                  onChange={() => {state.darkMode ? dispatch ({type : 'Make_light'}) : dispatch({type : 'Make_dark'})}}
+                />
+              </Tooltip>
+              <Tooltip title="Logout">
+                <Button sx={{ color: state.darkMode ? "#fff" : "#000" }} onClick={LogoutFun}>
                   Logout
                 </Button>
               </Tooltip>
@@ -215,9 +228,14 @@ function CandidateHoc({ children }) {
           </BottomNavigation>
         </Box>
       </Box>
-      <Box>{children}</Box>
+      <Box>
+      <div style={{marginTop : "64px"}}>
+      {children}
+      </div>
+      
+      </Box>
     </>
   );
 }
 
-export default CandidateHoc;
+export default React.memo(CandidateHoc);

@@ -1,6 +1,6 @@
 import * as React from "react";
 import AppBar from "@mui/material/AppBar";
-import {Box,Switch} from "@mui/material";
+import { Box, Switch } from "@mui/material";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
@@ -12,18 +12,23 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import Logo from '../../assets/logo2.png'
+import Logo from "../../assets/logo2.png";
 import "./NavBar.css";
 import { useNavigate } from "react-router-dom";
+import {DarkModeContext} from "../Context/darkmode";
 
-const pages = [{label : "Find a job", path:'/candidate/auth'},{label : "find a candidate" , path:'/employer/auth'}];
+const pages = [
+  { label: "Find a job", path: "/candidate/auth" },
+  { label: "Find a candidate", path: "/employer/auth" },
+];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function NavBar() {
-
   const navigate = useNavigate(); //call navigation
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [state, dispatch] = React.useContext(DarkModeContext);
+  console.log(state.darkMode);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -43,11 +48,14 @@ function NavBar() {
 
   const navigateToPage = (path) => {
     navigate(path);
-  }
+  };
 
   return (
     <AppBar className="container" position="static">
-      <Container maxWidth="xl">
+      <Container
+        sx={{ backgroundColor: state.darkMode ? "#000" : "#fff" }}
+        maxWidth="xl"
+      >
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
@@ -61,11 +69,11 @@ function NavBar() {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-            
+
               textDecoration: "none",
             }}
           >
-            <img src={Logo} alt="logo" style={{width:"100px"}}/>
+            <img src={Logo} alt="logo" style={{ width: "100px" }} />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -75,7 +83,7 @@ function NavBar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-            
+              sx={{ color: state.darkMode ? "#fff" : "#000" }}
             >
               <MenuIcon />
             </IconButton>
@@ -117,18 +125,22 @@ function NavBar() {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-            
+
               textDecoration: "none",
             }}
           >
-            <img src={Logo} alt="logo" style={{width:"100px"}}/>
+            <img src={Logo} alt="logo" style={{ width: "100px" }} />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={() => navigateToPage(page.path)}
-                sx={{ my: 2, color: "black", display: "block" }}
+                sx={{
+                  my: 2,
+                  color: state.darkMode ? "#fff" : "#000",
+                  display: "block",
+                }}
               >
                 {page.label}
               </Button>
@@ -136,8 +148,12 @@ function NavBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-            <Switch  defaultChecked />
+            <Tooltip title="Change Mode">
+              <Switch
+                checked={state.darkMode}
+                onChange={() => {state.darkMode ? dispatch ({type : 'Make_light'}) : dispatch({type : 'Make_dark'})}}
+              />
+              {/* setdarkMode(prev => !prev) */}
             </Tooltip>
             <Menu
               sx={{ mt: "45px" }}

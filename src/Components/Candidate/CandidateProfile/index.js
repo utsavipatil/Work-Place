@@ -322,4 +322,4 @@ function CandidateProfile() {
   );
 }
 
-export default CandidateProfile;
+export default React.memo(CandidateProfile);
