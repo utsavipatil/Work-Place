@@ -20,7 +20,7 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
-import React from "react";
+import React, {useContext} from "react";
 import LandingPage from "../Components/LandingPage";
 import AuthPage from "../Components/AuthPage";
 import CandidateOnboarding from "../Components/Candidate/CandidateOnboarding";
@@ -35,23 +35,25 @@ import EmployerConversation from "../Components/Employer/Conversation";
 import Applicants from "../Components/Employer/Applicants";
 import CandidateHoc from "../Components/HOC/CandidateHoc";
 import EmployerHoc from "../Components/HOC/EmployerHoc";
+import { UserContext } from "../Components/Context/UserContext";
 
 function Navs() {
-  const user = JSON.parse(localStorage.getItem("user")) || null;
-  const userinfo = JSON.parse(localStorage.getItem("userinfo")) || null;
+  const [state , dispatch] = useContext(UserContext);
   const CandidateProtactedRoutes = () => {
-    if (user && userinfo?.type === "candidate") {
+    if (state.user && state.userinfo?.type === "candidate") {
       return <Outlet />;
     } else {
+      // console.log('fail to login as candiadate');
       return <Navigate to="/" />;
     }
   };
 
   const EmployerProtactedRoutes = () => {
-    console.log(userinfo, "userinfo");
-    if (user && userinfo?.type === "employer") {
+    console.log(state.userinfo, "userinfo");
+    if (state.user && state.userinfo?.type === "employer") {
       return <Outlet />;
     } else {
+      // console.log('fail to login as employer');
       return <Navigate to="/" />;
     }
   };

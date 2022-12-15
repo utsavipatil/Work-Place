@@ -203,7 +203,7 @@ function EmployerOnboarding() {
               setUserInfo({ ...userInfo, hrEmail: e.target.value })
             }
             id="outlined"
-            label="Education"
+            label="Email"
             sx={{ width: "80%" }}
           />
         </Grid>
