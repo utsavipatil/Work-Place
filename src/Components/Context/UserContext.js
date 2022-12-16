@@ -10,7 +10,7 @@ const initialState = {
 const reducer = (state, action) => {
   switch (action.type) {
     case "SET_USER":
-      localStorage.setItem('user', JSON.stringify(action.payload))
+      localStorage.setItem('user', JSON.stringify(action.payload)) //async call
       return {
         user: action.payload,
       };
